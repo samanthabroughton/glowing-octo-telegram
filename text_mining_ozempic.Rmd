@@ -1,0 +1,1304 @@
+---
+title: "Data Project II"
+author: "Samantha Broughton"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Compilation 
+```{r}
+library(RedditExtractoR)
+
+df1 <- find_thread_urls(keywords="Ozempic", subreddit="loseit", sort_by = "top", period="all")
+df2 <- find_thread_urls(keywords="Ozempic", subreddit="Health", sort_by = "top", period="all")
+df3 <- find_thread_urls(keywords="Ozempic", subreddit="KUWTKsnark", sort_by = "top", period="all")
+df5 <- find_thread_urls(keywords="Ozempic", subreddit="pharmacy", sort_by = "top", period="all")
+df6 <- find_thread_urls(keywords="Ozempic", subreddit="medicine", sort_by = "top", period="all")
+df7 <- find_thread_urls(keywords="Ozempic", subreddit="news", sort_by = "top", period="all")
+df9 <- find_thread_urls(keywords="Ozempic", subreddit="Fauxmoi", sort_by = "top", period="all")
+df11 <- find_thread_urls(keywords="Ozempic", subreddit="TheBonfire", sort_by = "top", period="all")
+df12 <- find_thread_urls(keywords="Ozempic", subreddit="RHOBH", sort_by = "top", period="all")
+
+library(tidyverse)
+df_list <- list(df1, df2, df3, df5, df6, df7, df9, df11, df12)
+
+
+result_df <- df_list %>% reduce(full_join, by = 'date_utc')
+
+
+```
+
+```{r}
+library(tm)
+
+thread_urls1 <- find_thread_urls(keywords = "Ozempic", subreddit = "loseit", sort_by = "top", period = "all")
+filtered_urls1 <- thread_urls1[grep("shortage", thread_urls1, ignore.case = TRUE), ]
+
+thread_urls2 <- find_thread_urls(keywords = "Ozempic", subreddit = "Health", sort_by = "top", period = "all")
+filtered_urls2 <- thread_urls1[grep("shortage", thread_urls1, ignore.case = TRUE), ]
+
+thread_urls3 <- find_thread_urls(keywords = "Ozempic", subreddit = "KUWTKsnark", sort_by = "top", period = "all")
+filtered_urls3 <- thread_urls1[grep("shortage", thread_urls1, ignore.case = TRUE), ]
+
+thread_urls4 <- find_thread_urls(keywords = "Ozempic", subreddit = "pharmacy", sort_by = "top", period = "all")
+filtered_urls4 <- thread_urls1[grep("shortage", thread_urls1, ignore.case = TRUE), ]
+
+thread_urls5 <- find_thread_urls(keywords = "Ozempic", subreddit = "medicine", sort_by = "top", period = "all")
+filtered_urls5 <- thread_urls1[grep("shortage", thread_urls1, ignore.case = TRUE), ]
+
+thread_urls6 <- find_thread_urls(keywords = "Ozempic", subreddit = "news", sort_by = "top", period = "all")
+filtered_urls6 <- thread_urls1[grep("shortage", thread_urls1, ignore.case = TRUE), ]
+
+thread_urls7 <- find_thread_urls(keywords = "Ozempic", subreddit = "Fauxmoi", sort_by = "top", period = "all")
+filtered_urls7 <- thread_urls1[grep("shortage", thread_urls1, ignore.case = TRUE), ]
+
+thread_urls8 <- find_thread_urls(keywords = "Ozempic", subreddit = "TheBonfire", sort_by = "top", period = "all")
+filtered_urls8 <- thread_urls1[grep("shortage", thread_urls1, ignore.case = TRUE), ]
+
+thread_urls9 <- find_thread_urls(keywords = "Ozempic", subreddit = "RHOBH", sort_by = "top", period = "all")
+filtered_urls9 <- thread_urls1[grep("shortage", thread_urls1, ignore.case = TRUE), ]
+
+filtered_list_result <- list(filtered_urls1, filtered_urls2, filtered_urls3, filtered_urls4, filtered_urls5, filtered_urls6, filtered_urls7)
+
+thread_urls_result <- list(thread_urls1, thread_urls2, thread_urls3, thread_urls4, thread_urls5, thread_urls6, thread_urls7)
+
+
+result_df_filtered_list_result <- filtered_list_result %>% reduce(full_join, by = 'date_utc')
+
+result_df_thread_urls_result <- thread_urls_result %>% reduce(full_join, by = 'date_utc')
+
+```
+
+```{r}
+library(RedditExtractoR)
+weightloss1 <- find_thread_urls(keywords = "Ozempic", subreddit = "loseit", sort_by = "top", period = "all")
+filtered_urls_1 <- thread_urls1[grep("weight loss", thread_urls1, ignore.case = TRUE), ]
+
+weightloss2 <- find_thread_urls(keywords = "Ozempic", subreddit = "Health", sort_by = "top", period = "all")
+filtered_urls_2 <- thread_urls1[grep("weight loss", thread_urls1, ignore.case = TRUE), ]
+
+weightloss3 <- find_thread_urls(keywords = "Ozempic", subreddit = "KUWTKsnark", sort_by = "top", period = "all")
+filtered_urls_3 <- thread_urls1[grep("weight loss", thread_urls1, ignore.case = TRUE), ]
+
+weightloss4 <- find_thread_urls(keywords = "Ozempic", subreddit = "pharmacy", sort_by = "top", period = "all")
+filtered_urls_4 <- thread_urls1[grep("weight loss", thread_urls1, ignore.case = TRUE), ]
+
+weightloss5 <- find_thread_urls(keywords = "Ozempic", subreddit = "medicine", sort_by = "top", period = "all")
+filtered_urls_5 <- thread_urls1[grep("weight loss", thread_urls1, ignore.case = TRUE), ]
+
+weightloss6 <- find_thread_urls(keywords = "Ozempic", subreddit = "news", sort_by = "top", period = "all")
+filtered_urls_6 <- thread_urls1[grep("weight loss", thread_urls1, ignore.case = TRUE), ]
+
+weightloss7 <- find_thread_urls(keywords = "Ozempic", subreddit = "Fauxmoi", sort_by = "top", period = "all")
+filtered_urls_7 <- thread_urls1[grep("weight loss", thread_urls1, ignore.case = TRUE), ]
+
+weightloss8 <- find_thread_urls(keywords = "Ozempic", subreddit = "TheBonfire", sort_by = "top", period = "all")
+filtered_urls_8 <- thread_urls1[grep("weight loss", thread_urls1, ignore.case = TRUE), ]
+
+weightloss9 <- find_thread_urls(keywords = "Ozempic", subreddit = "RHOBH", sort_by = "top", period = "all")
+filtered_urls_9 <- thread_urls1[grep("weight loss", thread_urls1, ignore.case = TRUE), ]
+
+weight_loss_list_result <- list(weightloss1, weightloss2, weightloss3, weightloss4, weightloss5, weightloss6, weightloss7, weightloss8, weightloss9)
+
+weight_loss_list_filtered_result <- list(filtered_urls_1, filtered_urls_2, filtered_urls_3, filtered_urls_4, filtered_urls_5, filtered_urls_6, filtered_urls_7, filtered_urls_8, filtered_urls_9)
+
+result_df_weight_loss_list_filtered_result <- weight_loss_list_filtered_result %>% reduce(full_join, by = 'date_utc')
+
+result_df_weight_loss_list_result <- weight_loss_list_result %>% reduce(full_join, by = 'date_utc')
+
+```
+
+```{r}
+find_subreddits("Ozempic")
+find_subreddits("ADHD")
+
+```
+
+
+```{r}
+study1 <- find_thread_urls(keywords="study", subreddit="adhd_college", sort_by = "top", period="all")
+
+study2 <- find_thread_urls(keywords="study", subreddit="teenagers", sort_by = "top", period="all")
+
+study3 <- find_thread_urls(keywords="study", subreddit="adhdwomen", sort_by = "top", period="all")
+
+study4 <- find_thread_urls(keywords="study", subreddit="ADHD_Life", sort_by = "top", period="all")
+
+study5 <- find_thread_urls(keywords="study", subreddit="ADHD", sort_by = "top", period="all")
+
+study6 <- find_thread_urls(keywords="study", subreddit="ADHDguide", sort_by = "top", period="all")
+
+
+study_list_result <- list(study1, study2, study3, study4, study5)
+
+non_na_list <- purrr::discard(study_list_result, ~all(is.na(.)))
+
+
+
+result_df_study_list_result <- purrr::reduce(non_na_list, dplyr::full_join, by = "date_utc")
+
+
+
+
+```
+
+```{r}
+misuse1 <- find_thread_urls(keywords="misuse", subreddit="adhd_college", sort_by = "top", period="all")
+
+misuse2 <- find_thread_urls(keywords="misuse", subreddit="teenagers", sort_by = "top", period="all")
+
+misuse3 <- find_thread_urls(keywords="misuse", subreddit="adhdwomen", sort_by = "top", period="all")
+
+misuse4 <- find_thread_urls(keywords="misuse", subreddit="ADHD_Life", sort_by = "top", period="all")
+
+misuse5 <- find_thread_urls(keywords="misuse", subreddit="ADHD", sort_by = "top", period="all")
+
+misuse6 <- find_thread_urls(keywords="misuse", subreddit="ADHDguide", sort_by = "top", period="all")
+
+misuse_list_result <- list(misuse2, misuse3, misuse5)
+
+non_na_list <- purrr::discard(misuse_list_result, ~all(is.na(.)))
+
+
+
+result_df_misuse_list_result <- purrr::reduce(non_na_list, dplyr::full_join, by = "date_utc")
+
+
+```
+
+```{r}
+shortage1 <- find_thread_urls(keywords="shortage", subreddit="adhd_college", sort_by = "top", period="all")
+
+shortage2 <- find_thread_urls(keywords="shortage", subreddit="teenagers", sort_by = "top", period="all")
+
+shortage3 <- find_thread_urls(keywords="shortage", subreddit="adhdwomen", sort_by = "top", period="all")
+
+shortage4 <- find_thread_urls(keywords="shortage", subreddit="ADHD_Life", sort_by = "top", period="all")
+
+shortage5 <- find_thread_urls(keywords="shortage", subreddit="ADHD", sort_by = "top", period="all")
+
+shortage6 <- find_thread_urls(keywords="shortage", subreddit="ADHDguide", sort_by = "top", period="all")
+
+shortage_list_result <- list(shortage1, shortage2, shortage3, shortage5)
+
+library(purrr)
+
+
+non_na_list <- purrr::discard(shortage_list_result, ~all(is.na(.)))
+
+
+
+result_df_shortage_list_result <- purrr::reduce(non_na_list, dplyr::full_join, by = "date_utc")
+
+
+```
+# Corpus Creation
+
+```{r}
+# Create an empty character vector to store the combined text data
+combined_text <- character(0)
+
+# Add text data from each data frame to the combined_text vector
+combined_text <- c(combined_text, result_df_shortage_list_result$text)
+combined_text <- c(combined_text, result_df_study_list_result$text)
+combined_text <- c(combined_text, result_df_misuse_list_result$text)
+
+combined_text <- c(combined_text, weight_loss_list_filtered_result$text)
+combined_text <- c(combined_text, weight_loss_list_result$text)
+combined_text <- c(combined_text, filtered_list_result$text)
+combined_text <- c(combined_text, thread_urls_result$text)
+combined_text <- c(combined_text, result_df$text)
+
+# Create a corpus from the combined text data
+library(tm)
+library(dplyr)
+library(tidyr)
+library(stringr)
+corpus <- Corpus(VectorSource(combined_text))
+
+# ADHD Corpus
+combined_text1 <- character(0)
+
+
+combined_text1 <- c(combined_text1,(result_df_study_list_result$text))
+combined_text1 <- c(combined_text1,(result_df_misuse_list_result$text))
+combined_text1 <- c(combined_text1,(result_df_shortage_list_result$text))
+
+# Create a Corpus with each text item as a separate document
+corpus_adhd <- Corpus(VectorSource(combined_text1))
+
+# Ozempic Corpus
+
+# Create an empty character vector to store the combined text data
+combined_text2 <- character(0)
+
+# Add text data from each data frame to the combined_text vector
+
+
+combined_text2 <- c(combined_text2, weight_loss_list_filtered_result$text)
+combined_text2 <- c(combined_text2, weight_loss_list_result$text)
+combined_text2 <- c(combined_text2, filtered_list_result$text)
+combined_text2 <- c(combined_text2, thread_urls_result$text)
+combined_text2 <- c(combined_text2, result_df$text)
+
+corpus_ozempic <- Corpus(VectorSource(combined_text2))
+
+```
+# Temporal Study
+```{r}
+# ADHD
+# Combine unique dates from all dataframes
+all_dates <- sort(unique(c(dates_study, dates_misuse, dates_shortage)))
+
+# Replace NA with a placeholder date 
+all_dates[is.na(all_dates)] <- as.Date("1970-01-01")
+
+# Calculate word counts for each term and each dataframe
+word_counts_study <- table(factor(result_df_study_list_result$date_utc, levels = all_dates))
+word_counts_misuse <- table(factor(result_df_misuse_list_result$date_utc, levels = all_dates))
+word_counts_shortage <- table(factor(result_df_shortage_list_result$date_utc, levels = all_dates))
+
+# Combine the results into a single dataframe
+word_counts_df <- data.frame(
+  date_utc = all_dates,
+  adhd_study = as.numeric(word_counts_study),
+  adhd_misuse = as.numeric(word_counts_misuse),
+  shortage = as.numeric(word_counts_shortage)
+)
+
+word_counts_df$freq_group <- cut(rowSums(word_counts_df[, -1]), breaks = c(0, 50, 100, Inf), labels = c("Low", "Medium", "High"), include.lowest = TRUE)
+
+
+# Print the resulting dataframe
+print(word_counts_df)
+
+# Ozempic
+# Combine unique dates from all dataframes
+all_dates_search <- sort(unique(c(dates_weight_loss_list_filtered, dates_weight_loss_list, dates_filtered_list, dates_thread_urls, dates_result_df)))
+
+# Replace NA with a placeholder date 
+all_dates_search[is.na(all_dates_search)] <- as.Date("1970-01-01")
+
+# Search for the specified terms
+counts_shortage <- table(factor(c(result_df_shortage_list_result$date_utc, thread_urls_result$date_utc), levels = all_dates_search))
+counts_weight_loss <- table(factor(c(weight_loss_list_filtered_result$date_utc, weight_loss_list_result$date_utc), levels = all_dates_search))
+counts_ozempic <- table(factor(result_df$date_utc, levels = all_dates_search))
+
+# Combine the results into a single dataframe
+search_counts_df <- data.frame(
+  date_utc = all_dates_search,
+  shortage = as.numeric(counts_shortage),
+  weight_loss = as.numeric(counts_weight_loss),
+  ozempic = as.numeric(counts_ozempic)
+)
+
+# Create bins based on frequency
+search_counts_df$freq_group <- cut(rowSums(search_counts_df[, -1]), breaks = c(0, 50, 100, Inf), labels = c("Low", "Medium", "High"), include.lowest = TRUE)
+# Print the resulting dataframe
+print(search_counts_df)
+
+
+
+```
+```{r}
+# Plotting the Word Frequencies Over Time
+
+# Load necessary libraries
+library(ggplot2)
+
+# Define color palette
+colors <- c("adhd_study" = "blue", "adhd_misuse" = "green", "shortage" = "red")
+
+# Create the plot
+time <- ggplot(word_counts_df, aes(x = date_utc)) +
+  geom_line(aes(y = adhd_study, color = "adhd_study"), linewidth = 1) +
+  geom_line(aes(y = adhd_misuse, color = "adhd_misuse"), linewidth = 1) +
+  geom_line(aes(y = shortage, color = "shortage"), linewidth = 1) +
+  labs(title = "Word Frequencies Over Time",
+       x = "Date",
+       y = "Word Frequency") +
+  scale_color_manual(values = colors) +
+  theme_minimal()
+
+print(time)
+
+
+```
+
+```{r}
+# Check the number of rows in each vector
+num_rows_meta <- sum(!is.na(meta(corpus_combined, tag = "date_utc")))
+num_rows_counts <- length(word_counts)
+
+# Print the number of rows
+cat("Number of rows in meta data:", num_rows_meta, "\n")
+cat("Number of rows in word counts:", num_rows_counts, "\n")
+
+# If the number of rows don't match, print the vectors for inspection
+if (num_rows_meta != num_rows_counts) {
+  print(meta(corpus_combined, tag = "date_utc"))
+  print(word_counts)
+}
+
+
+
+```
+
+
+
+```{r}
+# Load the necessary libraries
+library(tm)  # for text mining
+
+# Create a function to extract tokens from the code
+extract_tokens <- function(code) {
+    # Tokenize the code (split by spaces)
+    tokens <- unlist(strsplit(code, "\\s+"))
+    # Remove spaces
+    tokens <- gsub(" ", "", tokens)
+    # Remove common punctuation
+    tokens <- gsub("[[:punct:]]", "", tokens)
+    # Remove empty strings
+    tokens <- tokens[tokens != ""]
+    # Convert to lowercase
+    tokens <- tolower(tokens)
+    return(tokens)
+}
+
+# Create a dictionary and frequency distribution
+code_tokens <- lapply(combined_text, extract_tokens)
+
+# Combine all tokens into a single vector
+all_tokens <- unlist(code_tokens)
+
+# Create a dictionary of unique tokens
+unique_tokens <- unique(all_tokens)
+
+# Create a frequency distribution table
+freq_table <- table(all_tokens)
+
+# Sort the frequency distribution in descending order
+freq_table <- sort(freq_table, decreasing = TRUE)
+
+# Print the dictionary
+print(unique_tokens)
+
+# Print the frequency distribution
+print(freq_table)
+
+
+```
+
+# Corpus Preprocessing and TF and TF-IDF
+
+```{r}
+# Load the required libraries
+library(tm)
+library(purrr)
+#install.packages("slam")
+library(dplyr)
+library(tidytext)
+library(tidyr)
+
+
+# Preprocess the corpus
+corpus <- tm_map(corpus, content_transformer(tolower)) # Convert to lowercase
+corpus <- tm_map(corpus, removePunctuation) # Remove punctuation
+corpus <- tm_map(corpus, removeNumbers) # Remove numbers
+corpus <- tm_map(corpus, removeWords, stopwords("en")) # Remove English stopwords
+corpus <- tm_map(corpus, stripWhitespace) # Remove extra whitespaces
+
+corpus_adhd <- tm_map(corpus_adhd, content_transformer(tolower)) # Convert to lowercase
+corpus_adhd <- tm_map(corpus_adhd, removePunctuation) # Remove punctuation
+corpus_adhd <- tm_map(corpus_adhd, removeNumbers) # Remove numbers
+corpus_adhd <- tm_map(corpus_adhd, removeWords, stopwords("en")) # Remove English stopwords
+corpus_adhd <- tm_map(corpus_adhd, stripWhitespace) # Remove extra whitespaces
+
+corpus_ozempic <- tm_map(corpus_ozempic, content_transformer(tolower)) # Convert to lowercase
+corpus_ozempic <- tm_map(corpus_ozempic, removePunctuation) # Remove punctuation
+corpus_ozempic <- tm_map(corpus_ozempic, removeNumbers) # Remove numbers
+corpus_ozempic <- tm_map(corpus_ozempic, removeWords, stopwords("en")) # Remove English stopwords
+corpus_ozempic <- tm_map(corpus_ozempic, stripWhitespace) # Remove extra whitespaces
+
+
+# Create a Document-Term Matrix (DTM)
+dtm <- DocumentTermMatrix(corpus)
+dtm_adhd <- DocumentTermMatrix(corpus_adhd)
+dtm_ozempic <- DocumentTermMatrix(corpus_ozempic)
+
+#dtm_df <- as.data.frame(as.matrix(word_frequencies_ozempic))
+
+# Calculate TF
+tf <- as.matrix(dtm)
+print(tf)
+
+tf_ozempic <- as.matrix(dtm_ozempic)
+print(tf_ozempic)
+tf_ozempic
+
+tf_adhd <- as.matrix(dtm_adhd)
+print(tf_adhd)
+
+# Calculate TF-IDF
+tfidf <- weightTfIdf(dtm)
+
+tfidf_ozempic <- weightTfIdf(tf_ozempic)
+tfidf_adhd <- weightTfIdf(tf_adhd)
+
+print(tfidf_ozempic)
+
+
+
+corpus_words <- tidy(dtm) %>%
+  bind_tf_idf(term,document,count)
+corpus_words
+
+
+corpus_words_adhd <- tidy(dtm_adhd) %>%
+  bind_tf_idf(term,document,count)
+
+print(corpus_words_adhd)
+
+
+corpus_words_ozempic <- tidy(dtm_ozempic) %>%
+  bind_tf_idf(term,document,count)
+
+
+
+corpus_words <- tidy(dtm) %>%
+ group_by(term) %>%
+  summarize(total_count = sum(count))
+print(corpus_words)
+
+corpus_words_adhd <- tidy(dtm_adhd) %>%
+  group_by(term) %>%
+  summarize(total_count = sum(count))
+print(corpus_words_adhd)
+
+corpus_words_ozempic <- tidy(dtm_ozempic) %>%
+  group_by(term) %>%
+  summarize(total_count = sum(count))
+print(corpus_words_ozempic)
+
+```
+
+# TF and TF-IDF
+```{r}
+
+
+library(dplyr)
+library(tidytext)
+
+# Assuming word_frequencies_ozempic is your data frame with word frequencies
+dtm_ozempic <- mutate(word_frequencies_ozempic, document_id = row_number())
+
+# Now, you can use this document_id as the document identifier in bind_tf_idf
+ozempic_tfidf <- word_frequencies_ozempic %>%
+  bind_tf_idf(term = word, document = document_id, n = frequency)
+
+# View the resulting data frame
+View(ozempic_tfidf)
+
+# Assuming ozempic_tfidf is your data frame
+ozempic_tfidf <- ozempic_tfidf %>%
+  filter(!is.na(tf_idf))
+
+# ADHD
+
+# Assuming word_frequencies_adhd2 is your data frame
+word_frequencies_adhd2 <- mutate(word_frequencies_adhd2, document_id = row_number())
+
+# Load the required libraries
+library(tidytext)
+library(dplyr)
+
+# Assuming "frequency" is the name of the column you want to remove
+word_frequencies_adhd2 <- select(word_frequencies_adhd2, -dummy_frequency)
+
+
+# Create a tibble with the document_id, term, and frequency
+adhd_tfidf <- word_frequencies_adhd2 %>%
+  select(document_id, word, total_frequency)  # Adjust column names as needed
+
+# Calculate TF-IDF using tidytext
+adhd_tfidf <- adhd_tfidf %>%
+  bind_tf_idf(word, document_id, total_frequency)  # Adjust column names as needed
+
+# View the resulting data frame
+View(adhd_tfidf)
+
+
+# Create a tibble with the document_id, term, and frequency
+adhd_tfidf <- word_frequencies_adhd2 %>%
+  select(document_id, word, total_frequency)
+
+# Calculate tf-idf
+adhd_tfidf <- adhd_tfidf %>%
+  bind_tf_idf(term = word, document = document_id, n = total_frequency)
+
+# View the resulting tf-idf data frame
+View(adhd_tfidf)
+
+
+library(tidytext)
+
+# Create a tibble with the document_id, term, and frequency
+adhd_tfidf <- word_frequencies_adhd2 %>%
+  select(document_id, word, total_frequency)
+
+# Calculate TF-IDF
+adhd_tfidf <- adhd_tfidf %>%
+  bind_tf_idf(term = word, document = document_id, n = total_frequency)
+
+# Display the resulting tibble
+head(adhd_tfidf)
+
+
+
+```
+
+```{r}
+library(tidytext)
+library(dplyr)
+
+# Assuming word_frequencies_adhd2 is your dataframe
+adhd_tfidf <- word_frequencies_adhd2 %>%
+  select(document_id, word, total_frequency)
+
+# Calculate TF
+adhd_tfidf <- adhd_tfidf %>%
+  group_by(document_id) %>%
+  mutate(tf = total_frequency / sum(total_frequency))
+
+# Calculate IDF
+idf_values <- adhd_tfidf %>%
+  group_by(word) %>%
+  summarise(idf = log2(n() / sum(total_frequency > 0)))
+
+# Merge IDF values with the TF dataframe
+adhd_tfidf <- adhd_tfidf %>%
+  left_join(idf_values, by = "word")
+
+# Calculate TF-IDF
+adhd_tfidf <- adhd_tfidf %>%
+  mutate(tf_idf = tf * idf) %>%
+  select(document_id, word, tf_idf)
+
+# Display the resulting tibble
+head(adhd_tfidf)
+
+
+
+```
+
+
+
+# Modeling and Analytical Approach, Document Term Matrix and Term Frequency Matrix
+
+
+```{r}
+library(quanteda)
+# Assuming your corpus consists of text files, and filenames are document identifiers
+# Adjust the pattern in grep() based on your actual filenames
+
+# Extract document identifiers from filenames
+corpus_ids <- sapply(corpus, function(doc) grep("[0-9]+", meta(doc, "id"), value = TRUE))
+
+# Convert the document identifiers to character (if necessary)
+corpus_ids <- as.character(corpus_ids)
+
+# Convert to a Date object (adjust the format as needed)
+corpus_dates <- as.Date(corpus_ids, format = "%Y%m%d")
+
+# Define the target time frame
+target_month <- as.Date("2023-01-15")
+
+# Subset the corpus based on the date condition
+subset_corpus <- corpus[corpus_dates >= (target_month - 30) & corpus_dates <= (target_month + 30)]
+
+
+# Subset the corpus based on the date condition
+subset_corpus <- corpus[corpus_dates >= (target_month - 30) & corpus_dates <= (target_month + 30)]
+
+# Summary of the subset corpus
+summary(subset_corpus)
+
+# Define date range for 30 days before and after the target month
+start_date <- target_month - 30
+end_date <- target_month + 30
+
+# Subset the corpus into two separate corpora based on date range
+corpus_before <- subset_corpus[subset_corpus$date >= start_date & subset_corpus$date < target_month, ]
+corpus_after <- subset_corpus[subset_corpus$date > target_month & subset_corpus$date <= end_date, ]
+
+# Word mentions count for each corpus
+word_count_before <- textstat_frequency(corpus_before$text)
+word_count_after <- textstat_frequency(corpus_after$text)
+
+# Word frequency within the specified time frame
+word_freq_within_timeframe <- textstat_frequency(subset_corpus$text)
+
+# Subreddits with more relevant discussions based on word frequency
+relevant_subreddits <- subset_corpus$subreddit
+
+# You may further analyze and compare subreddits based on specific criteria or conduct sentiment analysis
+```
+
+```{r}
+# Load required libraries
+library(tm)
+library(quanteda)
+library(tidytext)
+library(dplyr)
+library(ggplot2)
+
+
+# 1. Term Frequency Analysis
+# Create a document-term matrix
+dtm <- DocumentTermMatrix(corpus)
+
+# Convert to term frequency matrix
+tf_matrix <- as.matrix(dtm)
+
+# Calculate sums of term frequencies for each word
+term_frequencies <- rowSums(tf_matrix)
+
+
+```
+
+```{r}
+# Time Series Analysis
+corpus_df <- data.frame(text = sapply(corpus, as.character), stringsAsFactors = FALSE)
+target_month <- as.Date("2022-08-01") # Replace with the actual target date
+
+
+# Define date range for 30 days before and after the target month
+start_date <- target_month - 30
+end_date <- target_month + 30
+
+# Subset the corpus into two separate corpora based on date range
+
+corpus_before <- corpus[meta(corpus, tag = "date") >= start_date & meta(corpus, tag = "date") < target_month, ]
+
+meta(corpus)
+
+
+corpus_before <- corpus[corpus$date >= start_date & corpus$date < target_month, ]
+corpus_after <- corpus[corpus$date > target_month & corpus$date <= end_date, ]
+
+library(quanteda)
+
+class(corpus_before)
+corpus_before <- Corpus(VectorSource(corpus_before))
+corpus_after <- Corpus(VectorSource(corpus_after))
+ #Convert the corpus to tokens
+
+
+corpus_before_text <- sapply(corpus_before, as.character)
+tokens_before <- tokens(corpus_before_text)
+
+corpus_after_text <- sapply(corpus_after, as.character)
+tokens_after <- tokens(corpus_after_text)
+
+# Calculate word frequencies
+dfm_before <- dfm(tokens_before)
+dfm_after <- dfm(tokens_after)
+
+# Word mentions count for each corpus
+library(quanteda)
+
+library(quanteda.textstats)
+
+word_count_before <- textstat_frequency(dfm_before)
+word_count_after <- textstat_frequency(dfm_after)
+
+# Word frequency within the specified time frame
+word_freq_within_timeframe <- textstat_frequency(subset_corpus$text)
+
+# Subreddits with more relevant discussions based on word frequency
+relevant_subreddits <- subset_corpus$subreddit
+
+
+```
+
+
+
+
+# N-grams Analysis
+```{r}
+
+# Assuming 'unique_tokens' is your tokens object
+unique_tokens <- tokens(unique_tokens)
+
+# Remove single-letter tokens
+filtered_tokens <- tokens_select(unique_tokens, min_nchar = 2)
+
+# Create a document-feature matrix (DFM) from the filtered tokens
+dfm_ngrams <- dfm(filtered_tokens)
+
+# Display the top features in the DFM
+top_features <- topfeatures(dfm_ngrams, n = 30, decreasing = TRUE, scheme = 'docfreq')
+print(top_features)
+
+library(quanteda)
+library(tm)
+library(slam)
+
+tf_adhd
+
+df_adhd <- data.frame(text = sapply(corpus_adhd, as.character), stringsAsFactors = FALSE)
+df_ozempic <- data.frame(text = sapply(corpus_ozempic, as.character), stringsAsFactors = FALSE)
+
+library(tidytext)
+library(dplyr)
+
+token_counts_adhd <- df_adhd %>%
+  unnest_tokens(words, text) %>%
+  count(words, sort = TRUE) %>%
+  filter(!is.na(words), nchar(words) > 1) %>%   
+  slice_max(n = 20, order_by = n, with_ties = FALSE)
+
+
+token_counts_ozempic <- df_ozempic %>%
+  mutate(text = tm::removeWords(text, tm::stopwords()),
+         text = stringr::str_squish(stringr::str_trim(text))) %>%
+  unnest_tokens(words, text) %>%
+  count(words, sort = TRUE) %>%
+  filter(!is.na(words), nchar(words) > 1) %>%  
+  slice_max(n = 20, order_by = n, with_ties = FALSE)
+
+view(token_counts_adhd)
+view(token_counts_ozempic)
+
+
+
+```
+
+# Sentiment Analysis 
+```{r}
+library(tidytext)
+library(dplyr)
+
+corpus_df <- data.frame(text = sapply(corpus, as.character), stringsAsFactors = FALSE)
+# Assuming 'corpus_df' is a data frame with a 'text' column
+corpus_df <- corpus_df %>%
+  unnest_tokens(word, text)
+
+# Load NRC sentiment lexicon
+library(textdata)
+nrc_lexicon <- get_sentiments("nrc")
+
+# Check column names and types
+str(corpus_df)
+str(nrc_lexicon)
+
+# Left join with AFINN sentiment scores
+corpus_df <- left_join(corpus_df, nrc_lexicon, by = "word")
+
+# Calculate word frequencies and handle NA values
+word_frequencies <- corpus_df %>%
+  filter(!is.na(sentiment)) %>%
+  group_by(word, sentiment) %>%
+  summarize(frequency = n(), .groups = "drop")
+
+# Display the aggregated word frequencies
+print(word_frequencies)
+
+
+word_frequencies1 <- corpus_df %>%
+  filter(!is.na(sentiment)) %>%
+  group_by(sentiment) %>%
+  summarize(frequency = n(), .groups = "drop")
+
+print(word_frequencies1)
+
+# Compare adhd and ozempic
+
+# Filter out rows with NA sentiment
+corpus_adhd <- data.frame(text = sapply(corpus, as.character), stringsAsFactors = FALSE)
+
+corpus_adhd <- corpus_adhd %>%
+  unnest_tokens(word, text)
+
+corpus_adhd <- left_join(corpus_adhd, nrc_lexicon, by = "word")
+
+word_frequencies_adhd <- corpus_adhd %>%
+  group_by(sentiment) %>%
+  summarize(frequency = n(), .groups = "drop")
+
+word_frequencies_adhd <- corpus_adhd %>%
+  filter(!is.na(sentiment)) %>%
+  group_by(word, sentiment) %>%
+  summarize(frequency = n(), .groups = "drop")
+
+# Assuming your data frame is named corpus_df_adhd
+
+corpus_df_adhd <- anti_join(corpus_df_adhd, stop_words_df, by = "word")
+
+word_frequencies_adhd2 <- corpus_df_adhd %>%
+  group_by(word) %>%
+  summarize(total_frequency = sum(count), .groups = "drop_last")
+
+
+
+# Ozempic
+
+corpus_ozempic <- data.frame(text = sapply(corpus, as.character), stringsAsFactors = FALSE)
+
+
+corpus_ozempic <- corpus_ozempic %>%
+  unnest_tokens(word, text)
+
+corpus_ozempic <- left_join(corpus_ozempic, nrc_lexicon, by = "word")
+
+word_frequencies_ozempic <- corpus_ozempic %>%
+  filter(!is.na(sentiment)) %>%
+  group_by(sentiment) %>%
+  summarize(frequency = n(), .groups = "drop")
+
+word_frequencies_ozempic2 <- ozempic_df %>%
+  group_by(word) %>%
+  summarize(total_frequency = sum(count), .groups = "drop_last")
+
+# Assuming ozempic_df is your data frame
+# Assuming ozempic_df is your data frame
+library(dplyr)
+
+# Calculate total frequency for each word
+# Assuming ozempic_df is your data frame
+library(dplyr)
+
+# Calculate total frequency for each word
+word_frequencies_ozempic2 <- ozempic_df %>%
+  summarise(across(everything(), sum, na.rm = TRUE)) %>%
+  pivot_longer(cols = everything(), names_to = "word", values_to = "total_frequency") %>%
+  filter(!is.na(word)) %>%
+  arrange(desc(total_frequency))
+
+# Display the aggregated word frequencies for Ozempic
+print(word_frequencies_ozempic2)
+
+install.packages("openxlsx")
+library(openxlsx)
+
+
+
+```
+# Custom Dictionary
+```{r}
+
+# 4. Sentiment Analysis
+# Create sentiment dictionary
+sentiment_dict <- data.frame(
+  word = c("happy", "joyful", "great", "sad", "unhappy", "terrible"),
+  sentiment = c("positive", "positive", "positive", "negative", "negative", "negative"),
+  stringsAsFactors = FALSE
+)
+
+
+library(tidytext)
+library(dplyr)
+# Tokenize the text column
+corpus <- corpus %>%
+  unnest_tokens(word, text)
+
+# Join with the sentiment_dict
+corpus_with_sentiment <- left_join(corpus_df, sentiment_dict, by = "word")
+
+# Extract sentiment scores
+scores <- as.data.frame(corpus_scores$Sentiment)
+
+# View the scores
+print(scores)
+
+
+```
+
+```{r}
+# Frequency for sentiment words
+
+# Filter for the highest scores for each sentiment
+highest_scores <- word_frequencies %>%
+  group_by(sentiment) %>%
+  top_n(1, frequency) %>%
+  arrange(desc(frequency))
+
+# Display the highest scores
+print(highest_scores)
+
+```
+# word frequency count
+```{r}
+library(dplyr)
+library(tidyr)
+library(tm)
+
+# Create a Corpus
+corpus_ozempic <- Corpus(VectorSource(ozempic_df$text))
+
+# Preprocess the text
+corpus_ozempic <- tm_map(corpus_ozempic, content_transformer(tolower))
+corpus_ozempic <- tm_map(corpus_ozempic, removePunctuation)
+corpus_ozempic <- tm_map(corpus_ozempic, removeNumbers)
+corpus_ozempic <- tm_map(corpus_ozempic, removeWords, stopwords("english"))
+corpus_ozempic <- tm_map(corpus_ozempic, stripWhitespace)
+
+# Convert the Corpus to a data frame
+corpus_df_ozempic <- as.data.frame(as.matrix(DocumentTermMatrix(corpus_ozempic)))
+
+# Unnest tokens using gather
+# Unnest tokens using pivot_longer
+corpus_df_ozempic <- pivot_longer(corpus_df_ozempic, cols = -1, names_to = "word", values_to = "count") %>%
+  filter(count > 0)
+
+
+# Word frequencies
+word_frequencies_ozempic <- corpus_df_ozempic %>%
+  group_by(word) %>%
+  summarize(frequency = n(), .groups = "drop_last")
+
+# Display the results
+print(word_frequencies_ozempic)
+
+# Create a DFM with n-grams
+dfm <- dfm(corpus, ngrams = 2:3, verbose = FALSE)
+
+# Filter word frequencies for ADHD and Ozempic based on the dictionaries
+filtered_word_frequencies_adhd <- dfm[adhd_effects, ]
+filtered_word_frequencies_ozempic <- dfm[ozempic_effects, ]
+
+# Calculate the most frequent n-grams
+most_frequent_ngrams_adhd <- textstat_frequency(filtered_word_frequencies_adhd, n = 10)
+most_frequent_ngrams_ozempic <- textstat_frequency(filtered_word_frequencies_ozempic, n = 10)
+
+```
+
+## Adverse Effect Dictionary
+```{r}
+# Install and load the required packages
+
+library(tm)
+library(tidytext)
+
+
+# Create a dictionary of common adverse effects for ADHD and Ozempic
+adhd_effects <- c("attention", "hyperactivity", "impulsivity", "inattention", "distractibility", 
+                  "restlessness", "irritability", "insomnia", "weight loss", "appetite loss", 
+                  "anxiety", "mood swings", "tachycardia", "increased blood pressure", "dizziness")
+
+ozempic_effects <- c("nausea", "vomiting", "diarrhea", "constipation", "headache", "loss", "weight", 
+                     "hypoglycemia", "abdominal pain", "indigestion", "fatigue", "injection site reactions", 
+                     "pancreatitis", "kidney problems", "thyroid tumors", "hypersensitivity reactions")
+
+
+# Filter word frequencies for ADHD and Ozempic based on the dictionaries
+filtered_word_frequencies_adhd <- word_frequencies_adhd2[word_frequencies_adhd2$word %in% adhd_effects, ]
+filtered_word_frequencies_ozempic <- word_frequencies_ozempic[word_frequencies_ozempic$word %in% ozempic_effects, ]
+
+# View the filtered word frequencies
+cat("Word Frequencies for ADHD Adverse Effects:\n")
+print(filtered_word_frequencies_adhd)
+
+cat("\nWord Frequencies for Ozempic Adverse Effects:\n")
+print(filtered_word_frequencies_ozempic)
+
+```
+# LDA Topic Modeling
+```{r}
+#install.packages("topicmodels")
+library(topicmodels)
+
+# Convert DTM to a matrix
+dtm_matrix <- as.matrix(dtm_matrix)
+
+# Set the number of topics
+num_topics <- 100
+# Run LDA
+lda_model <- LDA(dtm_matrix, k = num_topics)
+
+# Get terms for each topic
+terms_list <- terms(lda_model)
+
+# Display the top terms for each topic
+for (i in 1:num_topics) {
+  cat("Topic", i, ": ", paste(terms_list[[i]], collapse = ", "), "\n")
+}
+
+
+```
+
+```{r}
+# Install and load the required packages
+install.packages(c("quanteda", "dplyr", "tm", "tm.plugin.sentiment"))
+library(quanteda)
+library(dplyr)
+library(tm)
+library(tm.plugin.sentiment)
+
+# TF-IDF Analysis
+corpus <- YOUR_CORPUS_DATA # Replace 'YOUR_CORPUS_DATA' with your actual data
+dtm <- DocumentTermMatrix(corpus)
+tfidf <- weightTfIdf(dtm)
+
+# Subgroup Comparison Analysis
+terms_to_compare <- c("misuse", "ADHD", "drug shortage", "Ozempic")
+subreddit_data <- YOUR_SUBREDDIT_DATA # Replace 'YOUR_SUBREDDIT_DATA' with your actual data
+
+for (term_to_compare in terms_to_compare) {
+  subset_data <- subset(subreddit_data, grepl(term_to_compare, text, ignore.case = TRUE))
+  t_test_result <- t.test(subset_data$term_frequency ~ subset_data$subreddit)
+  # Further processing or analysis can be added here based on t_test_result
+}
+
+# Time Series Analysis
+corpus_df <- data.frame(text = corpus, date_utc) # Replace 'YOUR_DATE_COLUMN' with the actual column name
+target_month <- as.Date("2022-08-01") # Replace with the actual target date
+subset_corpus <- subset(corpus_df, date_utc >= target_month & date_utc < target_month + 30)
+summary_subset_corpus <- summary(subset_corpus)
+
+# Define date range
+start_date <- target_month - 30
+end_date <- target_month + 30
+
+# Subset corpus based on date range
+subset_corpus_before <- subset(corpus_df, date_utc >= start_date & date_utc < target_month)
+subset_corpus_after <- subset(corpus_df, date_utc >= target_month & date_utc < end_date)
+
+# Calculate word mentions count
+word_mentions_count_before <- YOUR_FUNCTION_TO_CALCULATE_WORD_MENTIONS(subset_corpus_before)
+word_mentions_count_after <- YOUR_FUNCTION_TO_CALCULATE_WORD_MENTIONS(subset_corpus_after)
+
+# Word Frequency Calculation
+word_frequency_before <- YOUR_FUNCTION_TO_CALCULATE_WORD_FREQUENCY(subset_corpus_before)
+word_frequency_after <- YOUR_FUNCTION_TO_CALCULATE_WORD_FREQUENCY(subset_corpus_after)
+
+# Subreddits with more relevant discussions
+relevant_subreddits_before <- subset_corpus_before$YOUR_SUBREDDIT_COLUMN # Replace 'YOUR_SUBREDDIT_COLUMN' with the actual column name
+relevant_subreddits_after <- subset_corpus_after$YOUR_SUBREDDIT_COLUMN # Replace 'YOUR_SUBREDDIT_COLUMN' with the actual column name
+
+```
+
+
+## Graphs and Charts, Appendix
+
+# Most Frequently Occurring Keywords: Word Cloud
+```{r}
+# Load required libraries
+library(wordcloud)
+
+wordcloud(words = term_frequencies[term_frequencies > threshold],
+          freq = term_frequencies[term_frequencies > threshold],
+          scale=c(3,0.5), colors=brewer.pal(8, "Dark2"),
+          max.words=100, random.order=FALSE, rot.per=0.35, 
+          min.freq = 5, random.color = TRUE)
+
+```
+
+# Most Distinctive Keywords; Venn Diagram
+```{r}
+# Load required libraries
+library(VennDiagram)
+
+
+venn.plot <- venn.plot(
+  x = list(Ozempic = ozempic_set, ADHD = adhd_set),
+  category.names = c("Ozempic", "ADHD"),
+  filename = NULL,
+  output = TRUE
+)
+
+```
+
+# Variation Over Time: Time Series Plot
+```{r}
+# Load required libraries
+library(ggplot2)
+
+
+ggplot(subset_corpus, aes(x = date, y = word_mentions_count)) +
+  geom_line() +
+  facet_wrap(~subreddit, scales = "free_y") +
+  labs(title = "Variation Over Time",
+       x = "Date",
+       y = "Word Mentions Count")
+
+```
+
+# Common Adverse Effects or Heath Concerns: N-gram Bar Chart
+```{r}
+# Load required libraries
+library(ggplot2)
+
+
+ggplot(data = most_frequent_ngrams, aes(x = term, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Common Adverse Effects or Health Concerns",
+       x = "N-gram",
+       y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+# Sentiment Analysis: Playing Around
+```{r}
+library(tm)
+library(dplyr)
+
+# Assuming 'corpus' is a Corpus object with a 'text' column
+
+# Preprocess the corpus
+corpus <- tm_map(corpus, content_transformer(tolower))
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeNumbers)
+corpus <- tm_map(corpus, removeWords, stopwords("english"))
+corpus <- tm_map(corpus, stripWhitespace)
+
+corpus_adhd <- tm_map(corpus_adhd, content_transformer(tolower))
+corpus_adhd <- tm_map(corpus_adhd, removePunctuation)
+corpus_adhd <- tm_map(corpus_adhd, removeNumbers)
+corpus_adhd <- tm_map(corpus_adhd, removeWords, stopwords("english"))
+corpus_adhd <- tm_map(corpus_adhd, stripWhitespace)
+# Convert the corpus to a data frame
+corpus_df <- data.frame(text = sapply(corpus, as.character), stringsAsFactors = FALSE)
+
+# Tokenize the text column
+corpus_df <- corpus_df %>%
+  unnest_tokens(word, text)
+
+# Join with the sentiment_dict
+corpus_with_sentiment <- left_join(_df, sentiment_dict, by = "word")
+
+
+
+
+```
+
+```{r}
+print(adhd_df)
+text_column <- adhd_df$text
+
+# Tokenize the text
+token_list <- strsplit(as.character(text_column), " ")
+
+# Create a data frame with one row for each token
+token_df <- data.frame(
+  word = unlist(token_list),
+  stringsAsFactors = FALSE
+)
+
+# Load the NRC sentiment lexicon
+library(textdata)
+nrc_lexicon <- get_sentiments("nrc")
+
+# Join the lexicon to the token data frame
+token_df <- left_join(token_df, nrc_lexicon, by = "word")
+
+# Filter out rows with NA sentiment
+token_df <- token_df %>%
+  filter(!is.na(sentiment))
+
+# Calculate word frequencies
+word_frequencies_adhd <- token_df %>%
+  group_by(sentiment, word) %>%
+  summarize(frequency = n(), .groups = "drop_last")
+
+# Display the resulting data frame
+print(word_frequencies_adhd)
+
+
+```
+
+```{r}
+# Convert the Corpus to a data frame
+corpus_df_adhd <- as.data.frame(as.matrix(DocumentTermMatrix(corpus_adhd)))
+corpus_df_adhd$sentiment <- meta(corpus_adhd)$sentiment
+
+# Check the structure of your data frame
+str(corpus_df_adhd)
+
+# Unnest tokens
+corpus_df_adhd <- corpus_df_adhd %>%
+  gather(word, count, -sentiment) %>%
+  filter(!is.na(sentiment), !is.na(word), count > 0)  # Filter out rows with NA sentiment, NA word, or count <= 0
+
+
+word_frequencies_adhd <- corpus_df_adhd %>%
+  group_by(sentiment, word) %>%
+  summarize(frequency = sum(count), .groups = "drop_last")
+
+# Display the aggregated word frequencies
+print(word_frequencies_adhd)
+
+
+```
+
+# stop words
+```{r}
+stop_words_df <- data.frame(word = c(
+  "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", 
+  "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", 
+  "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", 
+  "their", "theirs", "themselves", "what", "which", "who", "whom", "this", 
+  "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", 
+  "being", "have", "has", "had", "having", "do", "does", "did", "doing", 
+  "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", 
+  "while", "of", "at", "by", "for", "with", "about", "against", "between", 
+  "into", "through", "during", "before", "after", "above", "below", "to", 
+  "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", 
+  "further", "then", "once", "here", "there", "when", "where", "why", 
+  "how", "all", "any", "both", "each", "few", "more", "most", "other", 
+  "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", 
+  "too", "very", "s", "t", "can", "will", "just", "don", "should", "now", 
+  "d", "ll", "m", "o", "re", "ve", "y", "ain", "aren", "couldn", "didn", 
+  "doesn", "hadn", "hasn", "haven", "isn", "ma", "mightn", "mustn", "needn", 
+  "shan", "shouldn", "wasn", "weren", "won", "like"
+))
+
+```
+
+
+# Bar chart for sentiment analysis
+
+```{r}
+library(ggplot2)
+
+ggplot(highest_scores, aes(x = reorder(word, frequency), y = frequency, fill = sentiment)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Top Words with Highest Sentiment Scores",
+       x = "Word",
+       y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+# Word Frequency from Sentiment Analysis Bar Chart
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Assuming 'word_frequencies' is the result from the sentiment analysis
+word_frequencies <- word_frequencies %>%
+  arrange(desc(frequency)) %>%
+  head(20)  # Adjust the number of top words to display
+
+# Reorder the factor levels for better plotting
+word_frequencies <- mutate(word_frequencies, word = factor(word, levels = unique(word)))
+
+ggplot(word_frequencies, aes(x = word, y = frequency, fill = sentiment)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = frequency), vjust = -0.5, color = "black", size = 3) +  # Add text labels
+  labs(title = "Top Word Frequency from Sentiment Analysis",
+       x = "Word",
+       y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top") +
+  scale_fill_brewer(palette = "Dark2")
+
+
+```
+
+
+
